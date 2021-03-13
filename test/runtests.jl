@@ -1,6 +1,8 @@
 using Test
 using ObservationModels
 using AutomotiveSimulator
+using AdversarialDriving
+using Distributions
 
 struct DummyLandmark <: Landmark end
 struct DummySensorObservation <: SensorObservation end
@@ -35,12 +37,35 @@ end
         Entity(BlinkerState(VehicleState(VecSE2(10.0, 1.0, 0), roadway, 0.0), false, [], init_noise), VehicleDef(), 2)
     ])
 
-    old_state = scene[1].state.veh_state
+    old_state1 = scene[1].state.veh_state
+    old_id1 = scene[1].id
+    old_state2 = scene[2].state.veh_state
+    old_id2 = scene[2].id
     update_noiseless!(scene[1], scene)
-    @test scene[1].state.veh_state == old_state
+    @test scene[1].state.veh_state == old_state1
+    @test scene[2].state.veh_state == old_state2
+    @test scene[1].id == old_id1
+    @test scene[2].id == old_id2
 
+    old_state1 = scene[1].state.veh_state
+    old_id1 = scene[1].id
+    old_state2 = scene[2].state.veh_state
+    old_id2 = scene[2].id
     update_gaussian_noise!(scene[1], scene)
-    @test scene[1].state.veh_state == old_state
+    @test scene[1].state.veh_state == old_state1
+    @test scene[2].state.veh_state == old_state2
+    @test scene[1].id == old_id1
+    @test scene[2].id == old_id2
+
+    old_state1 = scene[1].state.veh_state
+    old_id1 = scene[1].id
+    old_state2 = scene[2].state.veh_state
+    old_id2 = scene[2].id
+    update_rb_noise!(scene[1], scene)
+    @test scene[1].state.veh_state == old_state1
+    @test scene[2].state.veh_state == old_state2
+    @test scene[1].id == old_id1
+    @test scene[2].id == old_id2
 
     bmap = BuildingMap()
     fixed_sats = [
@@ -49,8 +74,29 @@ end
     ObservationModels.Satellite(pos=VecE3(-1e7, 0.0, 1e7), clk_bias=0.0),
     ObservationModels.Satellite(pos=VecE3(100.0, 0.0, 1e7), clk_bias=0.0),
     ObservationModels.Satellite(pos=VecE3(1e7, 0.0, 1e7), clk_bias=0.0)
-        ]
+    ]
 
+    old_state1 = scene[1].state.veh_state
+    old_id1 = scene[1].id
+    old_state2 = scene[2].state.veh_state
+    old_id2 = scene[2].id
     update_gps_noise!(scene[1], scene, bmap, fixed_sats)
-    @test scene[1].state.veh_state == old_state
+    @test scene[1].state.veh_state == old_state1
+    @test scene[2].state.veh_state == old_state2
+    @test scene[1].id == old_id1
+    @test scene[2].id == old_id2
+end
+
+@testset "distributions" begin
+    d = Fsig_Normal(0.0)
+    @test Distributions.mean(d) == 0.0
+    @test Distributions.var(d) == 25.0
+
+    d = INormal_GMM(0.0, 5.0)
+    @test Distributions.mean(d) == 0.0
+    @test Distributions.var(d) == 25.0
+
+    d = INormal_Uniform(0.0, 5.0)
+    @test Distributions.mean(d) == 0.0
+    @test Distributions.var(d) == 25.0
 end
