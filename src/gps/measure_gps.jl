@@ -3,7 +3,7 @@ measure_gps(pos_vec::VecE3{T}, noise::Array{T}, satpos::Vector{Satellite}) where
 
 function to compute GPS measurements for x,y coordinate pos from satellite positions and noise
 """
-function measure_gps(pos_vec::VecE3{T}, noise::Array{T}, satpos::Vector{Satellite}) where T
+function measure_gps(pos_vec::VecE3{T}, noise::Array{T}, satpos::Vector{Satellite{T}}) where T
     ranges = Union{Missing, GPSRangeMeasurement}[]
     n_sats = length(satpos)
     for i in 1:n_sats
@@ -17,11 +17,11 @@ function measure_gps(pos_vec::VecE3{T}, noise::Array{T}, satpos::Vector{Satellit
 end
 
 """
-measure_gps(pos_vec::VecE3{T}, noise::Array{T}, buildingmap::Any, satpos::Vector{Satellite}) where T
+measure_gps(pos_vec::VecE3{T}, noise::Array{T}, buildingmap::BuildingMap{T}, satpos::Vector{Satellite}) where T
 
 function to compute GPS measurements given a building model
 """
-function measure_gps(pos_vec::VecE3{T}, noise::Array{T}, buildingmap::Any, satpos::Vector{Satellite}) where T
+function measure_gps(pos_vec::VecE3{T}, noise::Array{T}, buildingmap::BuildingMap{T}, satpos::Vector{Satellite{T}}) where T
     # Sat LOS vector
     n_sats = length(satpos)
     los_angs = Array{T}(undef, n_sats)
@@ -63,24 +63,24 @@ end
 """
 measure_gps(ent::Entity, noise::Array{T}, satpos::Vector{Satellite}) where T
 
-measure_gps(pos::VecSE2{T}, noise::Array{T}, buildingmap::Any, satpos::Vector{Satellite}) where T
+measure_gps(pos::VecSE2{T}, noise::Array{T}, buildingmap::BuildingMap{T}, satpos::Vector{Satellite}) where T
 
-measure_gps(ent::Entity, noise::Array{T}, buildingmap::Any, satpos::Vector{Satellite}) where T
+measure_gps(ent::Entity, noise::Array{T}, buildingmap::BuildingMap{T}, satpos::Vector{Satellite}) where T
 
 compatibility functions
 """
-function measure_gps(ent::Entity, noise::Array{T}, satpos::Vector{Satellite}) where T
+function measure_gps(ent::Entity, noise::Array{T}, satpos::Vector{Satellite{T}}) where T
     pos = posg(ent)
     pos_vec::VecE3{T} = VecE3(pos.x, pos.y, 0.0)
     measure_gps(pos_vec, noise, satpos)
 end
 
-function measure_gps(pos::VecSE2{T}, noise::Array{T}, buildingmap::Any, satpos::Vector{Satellite}) where T
+function measure_gps(pos::VecSE2{T}, noise::Array{T}, buildingmap::BuildingMap{T}, satpos::Vector{Satellite{T}}) where T
     pos_vec::VecE3{T} = VecE3(pos.x, pos.y, 0.0)
     measure_gps(pos_vec, noise, buildingmap, satpos)
 end
 
-function measure_gps(ent::Entity, noise::Array{T}, buildingmap::Any, satpos::Vector{Satellite}) where T
+function measure_gps(ent::Entity, noise::Array{T}, buildingmap::BuildingMap{T}, satpos::Vector{Satellite{T}}) where T
     pos = posg(ent)
     measure_gps(pos, noise, buildingmap, satpos)
 end
