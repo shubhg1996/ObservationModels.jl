@@ -32,8 +32,11 @@ module ObservationModels
     export update_gaussian_noise!
     include(joinpath("gaussian", "update_entity.jl"))
 
-    export RangeAndBearingMeasurement, update_rb_noise!
-    include(joinpath("range_bearing", "range_bearing.jl"))
+    export RangeAndBearingMeasurement, measure_range_bearing, RB_fix, update_rb_noise!
+    include(joinpath("range_bearing", "structs.jl"))
+    include(joinpath("range_bearing", "measure_rb.jl"))
+    include(joinpath("range_bearing", "rb_positioning.jl"))
+    include(joinpath("range_bearing", "update_entity.jl"))
     
     export INormal_Uniform, INormal_GMM, Fsig_Normal
 
