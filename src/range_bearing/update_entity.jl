@@ -33,3 +33,23 @@ function update_rb_noise!(ent::Entity, scene::Scene)
         scene[ent2.id] = Entity(update_veh_noise(ent2.state, noise), ent2.def, ent2.id) 
     end    
 end
+
+"""
+Noise in position from Range and bearing noise
+"""
+function estimate_rb_noise(ent::Entity, ent2::Entity, scene::Scene, noise::Array{T}) where T
+    ent1_pos = posg(ent)
+
+    ent2_pos = posg(ent2)
+    range_bearing = measure_range_bearing(ent1_pos, ent2_pos, noise) 
+        
+    rel_pos = RB_fix(range_bearing)
+    abs_y = -1*rel_pos[1]*cos(ent1_pos.θ) - rel_pos[2]*sin(ent1_pos.θ)
+    abs_x = -1*rel_pos[1]*sin(ent1_pos.θ) + rel_pos[2]*cos(ent1_pos.θ)
+
+    Δs = abs_x - (ent2_pos[1] - ent.state.noise.pos[1] - ent1_pos[1])
+    Δt = abs_y - (ent2_pos[2] - ent.state.noise.pos[2] - ent1_pos[2])
+    noise = Noise(pos=VecE2(Δs, Δt))
+
+    noise
+end

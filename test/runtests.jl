@@ -25,6 +25,9 @@ struct DummySensorObservation <: SensorObservation end
 
     d = BuildingMap()
     @test length(d.buildings) == 0
+
+    d = DistParams()
+    @test d.num_samples == 50
 end
 
 @testset "sensors" begin
@@ -99,4 +102,38 @@ end
     d = INormal_Uniform(0.0, 5.0)
     @test Distributions.mean(d) == 0.0
     @test Distributions.var(d) == 25.0
+
+    noise_t = [Noise(pos=VecE2(rand(), rand()), vel=rand()) for i=1:10]
+    @test length(Distributions.pdf(MvNormal([0.,0.,0.], [1.,1.,1.]), noise_t)) == 10
+    @test length(mean(Distributions.fit(MvNormal, noise_t))) == 3
+end
+
+@testset "learned probability" begin
+    roadway = gen_straight_roadway(1, 100.)
+
+    init_noise = Noise(pos = (0, 0), vel = 0)
+
+    scene = Scene([
+        Entity(BlinkerState(VehicleState(VecSE2(0.0, 1.0, 0), roadway, 0.0), false, [], init_noise), VehicleDef(), 1),
+        Entity(BlinkerState(VehicleState(VecSE2(10.0, 1.0, 0), roadway, 0.0), false, [], init_noise), VehicleDef(), 2)
+    ])
+
+    fixed_sats = [
+    ObservationModels.Satellite(pos=VecE3(-1e7, 1e7, 1e7), clk_bias=0.0),
+    ObservationModels.Satellite(pos=VecE3(1e7, 1e7, 1e7), clk_bias=0.0),
+    ObservationModels.Satellite(pos=VecE3(-1e7, 0.0, 1e7), clk_bias=0.0),
+    ObservationModels.Satellite(pos=VecE3(100.0, 0.0, 1e7), clk_bias=0.0),
+    ObservationModels.Satellite(pos=VecE3(1e7, 0.0, 1e7), clk_bias=0.0)
+    ]
+
+    params = DistParams(satpos=fixed_sats)
+    d = sample_and_fit(scene[1], scene, params)
+    @test length(d) == 2
+
+    scenes = [scene for i=1:5]
+    feat, y = preprocess_data(1, scenes)
+    @test size(feat)[2] == 5
+    @test size(feat)[2] == 5
+    @test size(feat)[1]%2 == 0
+    @test size(feat)[1]%2 == 0
 end
