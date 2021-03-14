@@ -1,8 +1,8 @@
 function construct_mdn(params::MDNParams)
     z_h = Dense(params.in_dims, params.hidden_dims, tanh)
     z_π = Dense(params.hidden_dims, params.N_modes)
-    z_σ = Dense(params.hidden_dims, params.out_dims, exp)
-    z_μ = Dense(params.hidden_dims, params.out_dims)    
+    z_σ = Dense(params.hidden_dims, params.out_dims*params.N_modes, exp)
+    z_μ = Dense(params.hidden_dims, params.out_dims*params.N_modes)    
 
     pi = Chain(z_h, z_π, softmax)
     sigma = Chain(z_h, z_σ)
@@ -24,9 +24,8 @@ function train_nnet!(feat::Array{T, 2}, data_y::Array{T, 2}, pi, mu, sigma, para
         π_full = pi(x)
         σ_full = sigma(x)
         μ_full = mu(x)
-        result = []
-        μ_comps = [μ_full[(i-1)*params.out_dims + 1:i*params.out_dims] for i in 1:params.N_modes]
-        σ_comps = [σ_full[(i-1)*params.out_dims + 1:i*params.out_dims] for i in 1:params.N_modes]
+        μ_comps = [μ_full[((i-1)*params.out_dims + 1):(i*params.out_dims)] for i in 1:params.N_modes]
+        σ_comps = [σ_full[((i-1)*params.out_dims + 1):(i*params.out_dims)] for i in 1:params.N_modes]
 
         logprobs = [log.(π_full)[i, :] .+ sum(log.(gaussian_distribution.(y, μ_comps[i], σ_comps[i])), dims=1)[1, :] for i in 1:params.N_modes]
         tot_logprob = logsumexp(hcat(logprobs...), dims=2) 

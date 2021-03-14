@@ -10,25 +10,25 @@ function extract_feature(ego::Entity, scene::Scene)
         if ent.id == ego.id
             ent_pos = posg(ent)
             ent_noise = AdversarialDriving.noise(ent)
-            feature[(ent.id-1)*4 + 1] = ent_pos.x   # x-coord
-            feature[(ent.id-1)*4 + 2] = ent_pos.y   # y-coord
-            feature[(ent.id-1)*4 + 3] = ent_pos.θ   # heading
-            feature[(ent.id-1)*4 + 4] = vel(ent)   # velocity   
+            feature[(ent.id-1)*4 + 1] = (ent_pos.x)/100.   # x-coord ego
+            feature[(ent.id-1)*4 + 2] = (ent_pos.y)/10.   # y-coord ego
+            feature[(ent.id-1)*4 + 3] = ent_pos.θ        # heading ego
+            feature[(ent.id-1)*4 + 4] = (vel(ent))/20.   # velocity ego  
 
-            error[(ent.id-1)*3 + 1] = ent_noise.pos.x  # x-noise
-            error[(ent.id-1)*3 + 2] = ent_noise.pos.y  # y-noise
-            error[(ent.id-1)*3 + 3] = ent_noise.vel  # vel-noise
+            error[(ent.id-1)*3 + 1] = ent_noise.pos.x  # x-noise ego
+            error[(ent.id-1)*3 + 2] = ent_noise.pos.y  # y-noise ego
+            error[(ent.id-1)*3 + 3] = ent_noise.vel  # vel-noise ego
         else
             ent_pos = posg(ent)
             ent_noise = AdversarialDriving.noise(ent)
-            feature[(ent.id-1)*4 + 1] = ent_pos.x - ego_pos.x   # x-coord
-            feature[(ent.id-1)*4 + 2] = ent_pos.y - ego_pos.y   # y-coord
-            feature[(ent.id-1)*4 + 3] = ent_pos.θ - ego_pos.θ   # heading
-            feature[(ent.id-1)*4 + 4] = vel(ent) - vel(ego)   # velocity
+            feature[(ent.id-1)*4 + 1] = (ent_pos.x - ego_pos.x)/100.   # x-coord relative
+            feature[(ent.id-1)*4 + 2] = (ent_pos.y - ego_pos.y)/10.   # y-coord relative
+            feature[(ent.id-1)*4 + 3] = ent_pos.θ - ego_pos.θ        # heading relative
+            feature[(ent.id-1)*4 + 4] = (vel(ent) - vel(ego))/20.   # velocity relative
 
-            error[(ent.id-1)*3 + 1] = ent_noise.pos.x - ego_noise.pos.x  # x-noise
-            error[(ent.id-1)*3 + 2] = ent_noise.pos.y - ego_noise.pos.y  # y-noise
-            error[(ent.id-1)*3 + 3] = ent_noise.vel - ego_noise.vel  # vel-noise
+            error[(ent.id-1)*3 + 1] = ent_noise.pos.x - ego_noise.pos.x  # x-noise relative
+            error[(ent.id-1)*3 + 2] = ent_noise.pos.y - ego_noise.pos.y  # y-noise relative
+            error[(ent.id-1)*3 + 3] = ent_noise.vel - ego_noise.vel  # vel-noise relative
         end
     end
     (feature, error)
