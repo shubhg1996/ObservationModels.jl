@@ -7,10 +7,10 @@ For visualization code please see [AutomotiveVisualization](https://github.com/s
 # Example
 
 An example implementation of the building model is provided for a simple case:
-* **Julia source**: [`examples\generate_buildings.jl`](https://github.com/shubhg1996/ObservationModels.jl/blob/master/examples\generate_buildings.jl)
+* **Julia source**: [`examples/generate_buildings.jl`](https://github.com/shubhg1996/ObservationModels.jl/blob/main/examples/generate_buildings.jl)
 
 An example implementation of the MDN training on simulated scenes is provided for a simple case:
-* **Julia source**: [`examples\train_mdn.jl`](https://github.com/shubhg1996/ObservationModels.jl/blob/master/examples\train_mdn.jl)
+* **Julia source**: [`examples/train_mdn.jl`](https://github.com/shubhg1996/ObservationModels.jl/blob/master/examples/train_mdn.jl)
 
 # Installation 
 
