@@ -21,22 +21,22 @@ module ObservationModels
     include("utils.jl")
 
     export Satellite, GPSRangeMeasurement, measure_gps, GPS_fix, update_gps_noise!, estimate_gps_noise
-    include(joinpath("gps", "structs.jl"))
-    include(joinpath("gps", "measure_gps.jl"))
-    include(joinpath("gps", "gps_positioning.jl"))
-    include(joinpath("gps", "update_entity.jl"))
+    include(joinpath("sensor_models", "gps", "structs.jl"))
+    include(joinpath("sensor_models", "gps", "measure_gps.jl"))
+    include(joinpath("sensor_models", "gps", "gps_positioning.jl"))
+    include(joinpath("sensor_models", "gps", "update_entity.jl"))
 
     export update_noiseless!
-    include(joinpath("noiseless", "update_entity.jl"))
+    include(joinpath("sensor_models", "noiseless", "update_entity.jl"))
 
     export update_gaussian_noise!
-    include(joinpath("gaussian", "update_entity.jl"))
+    include(joinpath("sensor_models", "gaussian", "update_entity.jl"))
 
     export RangeAndBearingMeasurement, measure_range_bearing, RB_fix, update_rb_noise!, estimate_rb_noise
-    include(joinpath("range_bearing", "structs.jl"))
-    include(joinpath("range_bearing", "measure_rb.jl"))
-    include(joinpath("range_bearing", "rb_positioning.jl"))
-    include(joinpath("range_bearing", "update_entity.jl"))
+    include(joinpath("sensor_models", "range_bearing", "structs.jl"))
+    include(joinpath("sensor_models", "range_bearing", "measure_rb.jl"))
+    include(joinpath("sensor_models", "range_bearing", "rb_positioning.jl"))
+    include(joinpath("sensor_models", "range_bearing", "update_entity.jl"))
     
     export INormal_Uniform, INormal_GMM, Fsig_Normal
 

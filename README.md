@@ -19,16 +19,16 @@ The package interacts with `Scene` objects from the interface and leverages `Noi
 Several sensor models are implemented.
 
 #### Noiseless Sensor Model
-* [`noiseless`](https://github.com/shubhg1996/ObservationModels.jl/tree/main/src/noiseless)
+* [`noiseless`](https://github.com/shubhg1996/ObservationModels.jl/tree/main/src/sensor_models/noiseless)
 
 #### Gaussian Noise Sensor Model
-* [`gaussian`](https://github.com/shubhg1996/ObservationModels.jl/tree/main/src/gaussian)
+* [`gaussian`](https://github.com/shubhg1996/ObservationModels.jl/tree/main/src/sensor_models/gaussian)
 
 #### GPS Sensor Model (w/ signal reflection errors from buildings)
-* [`gps`](https://github.com/shubhg1996/ObservationModels.jl/tree/main/src/gps)
+* [`gps`](https://github.com/shubhg1996/ObservationModels.jl/tree/main/src/sensor_models/gps)
 
 #### Range-Bearing Sensor Model
-* [`range_bearing`](https://github.com/shubhg1996/ObservationModels.jl/tree/main/src/range_bearing)
+* [`range_bearing`](https://github.com/shubhg1996/ObservationModels.jl/tree/main/src/sensor_models/range_bearing)
 
 # Probability Model Fitting
 Two probability fitting implementations are included in this package.
