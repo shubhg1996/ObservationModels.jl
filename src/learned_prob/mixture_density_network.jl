@@ -1,3 +1,6 @@
+"""
+Construct a Mixture Density Network and return individual networks for pi, mu and sigma
+"""
 function construct_mdn(params::MDNParams)
     z_h = Dense(params.in_dims, params.hidden_dims, tanh)
     z_π = Dense(params.hidden_dims, params.N_modes)
