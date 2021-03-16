@@ -11,5 +11,5 @@ makedocs(
     ])
 
 deploydocs(;
-    repo="github.com/shubhg1996/ObservationModels.jl",
+    repo="github.com/shubhg1996/ObservationModels.jl.git",
 )
